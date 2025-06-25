@@ -72,7 +72,7 @@ tags:
   - name: Accounts
   - name: Transfers
   - name: Transactions
-
+  
 paths:
   /api/auth/signup:
     post:
@@ -91,23 +91,49 @@ paths:
         '201':
           description: User created
 
-  /api/accounts:
+  /api/auth/login:
     post:
       tags:
-        - Accounts
-      summary: Create account
-      security:
-        - bearerAuth: []
+        - Auth
+      summary: Login a user
       requestBody:
         required: true
         content:
           application/json:
-            example:
-              userId: 1
-              balance: 1000
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - email
+                - password
       responses:
-        '201':
-          description: Account created
+        '200':
+          description: Login success
+        '401':
+          description: Invalid credentials
+
+  /api/accounts:
+   post:
+    tags:
+      - Accounts
+    summary: Create account
+    security:
+      - bearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          example:
+            type: "savings"
+            initialBalance: 1000
+            currency: "USD"
+    responses:
+      '201':
+        description: Account created
 
   /api/transfers:
     post:
